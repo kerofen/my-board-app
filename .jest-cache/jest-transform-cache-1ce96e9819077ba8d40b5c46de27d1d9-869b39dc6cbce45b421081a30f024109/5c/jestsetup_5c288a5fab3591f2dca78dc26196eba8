@@ -1,0 +1,25 @@
+ae35198d8827ae31e4b0768fe559d90f
+// Learn more: https://github.com/testing-library/jest-dom
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+require("@testing-library/jest-dom");
+// Mock環境変数
+process.env.MONGODB_URI = 'mongodb://localhost:27017/test-db';
+// グローバルなモック設定
+global.fetch = jest.fn();
+// console.errorをモック（テスト中の不要なエラー出力を抑制）
+const originalError = console.error;
+beforeAll(()=>{
+    console.error = jest.fn();
+});
+afterAll(()=>{
+    console.error = originalError;
+});
+// 各テスト後にモックをリセット
+afterEach(()=>{
+    jest.clearAllMocks();
+});
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcamFubmVcXERvY3VtZW50c1xcd29ya3NwYWNlXFxteS1ib2FyZC1hcHBcXGplc3Quc2V0dXAuanMiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gTGVhcm4gbW9yZTogaHR0cHM6Ly9naXRodWIuY29tL3Rlc3RpbmctbGlicmFyeS9qZXN0LWRvbVxuaW1wb3J0ICdAdGVzdGluZy1saWJyYXJ5L2plc3QtZG9tJ1xuXG4vLyBNb2Nr55Kw5aKD5aSJ5pWwXG5wcm9jZXNzLmVudi5NT05HT0RCX1VSSSA9ICdtb25nb2RiOi8vbG9jYWxob3N0OjI3MDE3L3Rlc3QtZGInXG5cbi8vIOOCsOODreODvOODkOODq+OBquODouODg+OCr+ioreWumlxuZ2xvYmFsLmZldGNoID0gamVzdC5mbigpXG5cbi8vIGNvbnNvbGUuZXJyb3LjgpLjg6Ljg4Pjgq/vvIjjg4bjgrnjg4jkuK3jga7kuI3opoHjgarjgqjjg6njg7zlh7rlipvjgpLmipHliLbvvIlcbmNvbnN0IG9yaWdpbmFsRXJyb3IgPSBjb25zb2xlLmVycm9yXG5iZWZvcmVBbGwoKCkgPT4ge1xuICBjb25zb2xlLmVycm9yID0gamVzdC5mbigpXG59KVxuXG5hZnRlckFsbCgoKSA9PiB7XG4gIGNvbnNvbGUuZXJyb3IgPSBvcmlnaW5hbEVycm9yXG59KVxuXG4vLyDlkITjg4bjgrnjg4jlvozjgavjg6Ljg4Pjgq/jgpLjg6rjgrvjg4Pjg4hcbmFmdGVyRWFjaCgoKSA9PiB7XG4gIGplc3QuY2xlYXJBbGxNb2NrcygpXG59KSJdLCJuYW1lcyI6WyJwcm9jZXNzIiwiZW52IiwiTU9OR09EQl9VUkkiLCJnbG9iYWwiLCJmZXRjaCIsImplc3QiLCJmbiIsIm9yaWdpbmFsRXJyb3IiLCJjb25zb2xlIiwiZXJyb3IiLCJiZWZvcmVBbGwiLCJhZnRlckFsbCIsImFmdGVyRWFjaCIsImNsZWFyQWxsTW9ja3MiXSwibWFwcGluZ3MiOiJBQUFBLDBEQUEwRDs7Ozs7UUFDbkQ7QUFFUCxXQUFXO0FBQ1hBLFFBQVFDLEdBQUcsQ0FBQ0MsV0FBVyxHQUFHO0FBRTFCLGNBQWM7QUFDZEMsT0FBT0MsS0FBSyxHQUFHQyxLQUFLQyxFQUFFO0FBRXRCLHNDQUFzQztBQUN0QyxNQUFNQyxnQkFBZ0JDLFFBQVFDLEtBQUs7QUFDbkNDLFVBQVU7SUFDUkYsUUFBUUMsS0FBSyxHQUFHSixLQUFLQyxFQUFFO0FBQ3pCO0FBRUFLLFNBQVM7SUFDUEgsUUFBUUMsS0FBSyxHQUFHRjtBQUNsQjtBQUVBLGlCQUFpQjtBQUNqQkssVUFBVTtJQUNSUCxLQUFLUSxhQUFhO0FBQ3BCIn0=

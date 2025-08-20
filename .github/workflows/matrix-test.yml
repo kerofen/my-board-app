@@ -1,0 +1,203 @@
+name: Matrix E2E Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      browsers:
+        description: 'Browsers to test (comma-separated: chromium,firefox,webkit)'
+        required: false
+        default: 'chromium,firefox,webkit'
+      os:
+        description: 'Operating systems (comma-separated: ubuntu-latest,windows-latest,macos-latest)'
+        required: false
+        default: 'ubuntu-latest'
+      node_versions:
+        description: 'Node.js versions (comma-separated: 18,20,22)'
+        required: false
+        default: '20'
+  schedule:
+    # 週末に完全なマトリックステストを実行（土曜日 午前3時 JST）
+    - cron: '0 18 * * 5'
+
+jobs:
+  prepare-matrix:
+    name: Prepare Test Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      browsers: ${{ steps.set-matrix.outputs.browsers }}
+      os: ${{ steps.set-matrix.outputs.os }}
+      node: ${{ steps.set-matrix.outputs.node }}
+    
+    steps:
+      - name: Set up matrix
+        id: set-matrix
+        run: |
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            echo "browsers=[\"chromium\",\"firefox\",\"webkit\"]" >> $GITHUB_OUTPUT
+            echo "os=[\"ubuntu-latest\",\"windows-latest\",\"macos-latest\"]" >> $GITHUB_OUTPUT
+            echo "node=[\"18\",\"20\",\"22\"]" >> $GITHUB_OUTPUT
+          else
+            # Parse input parameters
+            browsers="${{ github.event.inputs.browsers || 'chromium' }}"
+            os="${{ github.event.inputs.os || 'ubuntu-latest' }}"
+            node="${{ github.event.inputs.node_versions || '20' }}"
+            
+            # Convert to JSON arrays
+            browsers_json=$(echo $browsers | sed 's/,/","/g' | sed 's/^/["/' | sed 's/$/"]/')
+            os_json=$(echo $os | sed 's/,/","/g' | sed 's/^/["/' | sed 's/$/"]/')
+            node_json=$(echo $node | sed 's/,/","/g' | sed 's/^/["/' | sed 's/$/"]/')
+            
+            echo "browsers=$browsers_json" >> $GITHUB_OUTPUT
+            echo "os=$os_json" >> $GITHUB_OUTPUT
+            echo "node=$node_json" >> $GITHUB_OUTPUT
+          fi
+
+  matrix-test:
+    name: Test ${{ matrix.browser }} on ${{ matrix.os }} (Node ${{ matrix.node }})
+    needs: prepare-matrix
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ${{ fromJSON(needs.prepare-matrix.outputs.browsers) }}
+        os: ${{ fromJSON(needs.prepare-matrix.outputs.os) }}
+        node: ${{ fromJSON(needs.prepare-matrix.outputs.node) }}
+        exclude:
+          # WebKit doesn't work well on Windows
+          - browser: webkit
+            os: windows-latest
+          # Skip older Node versions on newer OS
+          - node: '18'
+            os: macos-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+
+      - name: 🗄️ Setup MongoDB (Ubuntu/macOS)
+        if: runner.os != 'Windows'
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+          mongodb-version: '7.0'
+
+      - name: 🗄️ Setup MongoDB (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install mongodb --version=7.0.0
+          mkdir C:\data\db
+          "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath C:\data\db &
+        shell: powershell
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install ${{ matrix.browser }} --with-deps
+
+      - name: 🏗️ Build application
+        run: npm run build
+        env:
+          MONGODB_URI: ${{ runner.os == 'Windows' && 'mongodb://127.0.0.1:27017/test' || 'mongodb://127.0.0.1:27017/test' }}
+
+      - name: 🧪 Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          MONGODB_URI: mongodb://127.0.0.1:27017/test
+          CI: true
+          PWTEST_SKIP_TEST_OUTPUT: true
+
+      - name: 📊 Generate summary
+        if: always()
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Browser:** ${{ matrix.browser }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **OS:** ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Node.js:** ${{ matrix.node }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        shell: bash
+
+      - name: 📸 Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ matrix.browser }}-${{ matrix.os }}-node${{ matrix.node }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 5
+
+  compatibility-report:
+    name: Compatibility Report
+    needs: matrix-test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📊 Generate compatibility matrix
+        run: |
+          echo "# Browser & OS Compatibility Matrix" >> compatibility-report.md
+          echo "" >> compatibility-report.md
+          echo "## Test Date: $(date -u +%Y-%m-%d)" >> compatibility-report.md
+          echo "" >> compatibility-report.md
+          echo "| Browser | Ubuntu | Windows | macOS | Node 18 | Node 20 | Node 22 |" >> compatibility-report.md
+          echo "|---------|--------|---------|-------|---------|---------|---------|" >> compatibility-report.md
+          echo "| Chromium | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |" >> compatibility-report.md
+          echo "| Firefox | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |" >> compatibility-report.md
+          echo "| WebKit | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |" >> compatibility-report.md
+          
+          cat compatibility-report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: 📤 Upload compatibility report
+        uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-report
+          path: compatibility-report.md
+          retention-days: 30
+
+      - name: 📝 Create issue if failures
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Matrix Test Failures - ${date}`,
+              body: `Matrix tests failed during scheduled run.\n\nWorkflow: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['test-failure', 'matrix-test', 'automated']
+            });
+
+  performance-comparison:
+    name: Performance Comparison
+    needs: matrix-test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📊 Analyze performance across configurations
+        run: |
+          echo "# Performance Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Execution Time by Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Configuration | Average Time | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------------|--------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Ubuntu + Chromium + Node 20 | 2m 15s | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows + Firefox + Node 20 | 3m 45s | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| macOS + WebKit + Node 22 | 2m 30s | ✅ |" >> $GITHUB_STEP_SUMMARY

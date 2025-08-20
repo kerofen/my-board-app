@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>掲示板APIテスト</h1>
+    <div id="result"></div>
+    <button onclick="testGet()">GET テスト</button>
+    <button onclick="testPost()">POST テスト</button>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        async function testGet() {
+            try {
+                const response = await fetch('http://localhost:3001/api/posts');
+                const data = await response.json();
+                resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                console.log('GET成功:', data);
+            } catch (error) {
+                resultDiv.innerHTML = 'エラー: ' + error.message;
+                console.error('GETエラー:', error);
+            }
+        }
+        
+        async function testPost() {
+            try {
+                const response = await fetch('http://localhost:3001/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: 'ブラウザテスト投稿',
+                        author: 'テストユーザー',
+                        content: 'ブラウザから投稿したテスト内容です。'
+                    })
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                console.log('POST成功:', data);
+            } catch (error) {
+                resultDiv.innerHTML = 'エラー: ' + error.message;
+                console.error('POSTエラー:', error);
+            }
+        }
+        
+        // 起動時に自動でGETテスト
+        testGet();
+    </script>
+</body>
+</html>

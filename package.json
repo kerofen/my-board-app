@@ -6,22 +6,48 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:smoke": "playwright test e2e/smoke.spec.ts",
+    "test:e2e:ci": "playwright test --reporter=html,github",
+    "test:all": "npm run test && npm run test:e2e",
+    "test:ci": "jest --config jest.config.ci.js",
+    "test:unit:ci": "jest --ci --coverage --maxWorkers=2",
+    "prebuild": "npm run lint",
+    "clean": "rm -rf .next .jest-cache coverage playwright-report test-results",
+    "db:seed": "node scripts/seed.js",
+    "db:cleanup": "node scripts/cleanup.js",
+    "db:reset": "npm run db:cleanup && npm run db:seed",
+    "test:e2e:data": "playwright test crud-with-data.spec.ts"
   },
   "dependencies": {
+    "mongoose": "^8.17.1",
+    "next": "15.4.5",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.5"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@jest/globals": "^30.0.5",
+    "@playwright/test": "^1.54.2",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.7.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
-    "@eslint/eslintrc": "^3"
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

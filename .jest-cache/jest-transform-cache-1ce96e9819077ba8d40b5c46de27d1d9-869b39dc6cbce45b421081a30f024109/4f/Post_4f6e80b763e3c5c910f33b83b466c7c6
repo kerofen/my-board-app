@@ -1,0 +1,93 @@
+02a267335fd026a6b315ce1f6f1d1b8f
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return _default;
+    }
+});
+const _mongoose = /*#__PURE__*/ _interop_require_wildcard(require("mongoose"));
+function _getRequireWildcardCache(nodeInterop) {
+    if (typeof WeakMap !== "function") return null;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function(nodeInterop) {
+        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
+}
+function _interop_require_wildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
+        return obj;
+    }
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
+        return {
+            default: obj
+        };
+    }
+    var cache = _getRequireWildcardCache(nodeInterop);
+    if (cache && cache.has(obj)) {
+        return cache.get(obj);
+    }
+    var newObj = {
+        __proto__: null
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj){
+        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+            if (desc && (desc.get || desc.set)) {
+                Object.defineProperty(newObj, key, desc);
+            } else {
+                newObj[key] = obj[key];
+            }
+        }
+    }
+    newObj.default = obj;
+    if (cache) {
+        cache.set(obj, newObj);
+    }
+    return newObj;
+}
+const PostSchema = new _mongoose.Schema({
+    title: {
+        type: String,
+        required: [
+            true,
+            'タイトルは必須です'
+        ],
+        maxlength: [
+            100,
+            'タイトルは100文字以内で入力してください'
+        ]
+    },
+    author: {
+        type: String,
+        required: [
+            true,
+            '投稿者名は必須です'
+        ],
+        maxlength: [
+            50,
+            '投稿者名は50文字以内で入力してください'
+        ]
+    },
+    content: {
+        type: String,
+        required: [
+            true,
+            '内容は必須です'
+        ],
+        maxlength: [
+            140,
+            '内容は140文字以内で入力してください'
+        ]
+    }
+}, {
+    timestamps: true
+});
+const _default = _mongoose.default.models.Post || _mongoose.default.model('Post', PostSchema);
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcamFubmVcXERvY3VtZW50c1xcd29ya3NwYWNlXFxteS1ib2FyZC1hcHBcXG1vZGVsc1xcUG9zdC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgbW9uZ29vc2UsIHsgU2NoZW1hLCBEb2N1bWVudCB9IGZyb20gJ21vbmdvb3NlJztcblxuZXhwb3J0IGludGVyZmFjZSBJUG9zdCBleHRlbmRzIERvY3VtZW50IHtcbiAgdGl0bGU6IHN0cmluZztcbiAgYXV0aG9yOiBzdHJpbmc7XG4gIGNvbnRlbnQ6IHN0cmluZztcbiAgY3JlYXRlZEF0OiBEYXRlO1xuICB1cGRhdGVkQXQ6IERhdGU7XG59XG5cbmNvbnN0IFBvc3RTY2hlbWE6IFNjaGVtYSA9IG5ldyBTY2hlbWEoXG4gIHtcbiAgICB0aXRsZToge1xuICAgICAgdHlwZTogU3RyaW5nLFxuICAgICAgcmVxdWlyZWQ6IFt0cnVlLCAn44K/44Kk44OI44Or44Gv5b+F6aCI44Gn44GZJ10sXG4gICAgICBtYXhsZW5ndGg6IFsxMDAsICfjgr/jgqTjg4jjg6vjga8xMDDmloflrZfku6XlhoXjgaflhaXlipvjgZfjgabjgY/jgaDjgZXjgYQnXSxcbiAgICB9LFxuICAgIGF1dGhvcjoge1xuICAgICAgdHlwZTogU3RyaW5nLFxuICAgICAgcmVxdWlyZWQ6IFt0cnVlLCAn5oqV56i/6ICF5ZCN44Gv5b+F6aCI44Gn44GZJ10sXG4gICAgICBtYXhsZW5ndGg6IFs1MCwgJ+aKleeov+iAheWQjeOBrzUw5paH5a2X5Lul5YaF44Gn5YWl5Yqb44GX44Gm44GP44Gg44GV44GEJ10sXG4gICAgfSxcbiAgICBjb250ZW50OiB7XG4gICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICByZXF1aXJlZDogW3RydWUsICflhoXlrrnjga/lv4XpoIjjgafjgZknXSxcbiAgICAgIG1heGxlbmd0aDogWzE0MCwgJ+WGheWuueOBrzE0MOaWh+Wtl+S7peWGheOBp+WFpeWKm+OBl+OBpuOBj+OBoOOBleOBhCddLFxuICAgIH0sXG4gIH0sXG4gIHtcbiAgICB0aW1lc3RhbXBzOiB0cnVlLFxuICB9XG4pO1xuXG5leHBvcnQgZGVmYXVsdCBtb25nb29zZS5tb2RlbHMuUG9zdCB8fCBtb25nb29zZS5tb2RlbDxJUG9zdD4oJ1Bvc3QnLCBQb3N0U2NoZW1hKTsiXSwibmFtZXMiOlsiUG9zdFNjaGVtYSIsIlNjaGVtYSIsInRpdGxlIiwidHlwZSIsIlN0cmluZyIsInJlcXVpcmVkIiwibWF4bGVuZ3RoIiwiYXV0aG9yIiwiY29udGVudCIsInRpbWVzdGFtcHMiLCJtb25nb29zZSIsIm1vZGVscyIsIlBvc3QiLCJtb2RlbCJdLCJtYXBwaW5ncyI6Ijs7OzsrQkFpQ0E7OztlQUFBOzs7a0VBakMyQzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBVTNDLE1BQU1BLGFBQXFCLElBQUlDLGdCQUFNLENBQ25DO0lBQ0VDLE9BQU87UUFDTEMsTUFBTUM7UUFDTkMsVUFBVTtZQUFDO1lBQU07U0FBWTtRQUM3QkMsV0FBVztZQUFDO1lBQUs7U0FBd0I7SUFDM0M7SUFDQUMsUUFBUTtRQUNOSixNQUFNQztRQUNOQyxVQUFVO1lBQUM7WUFBTTtTQUFZO1FBQzdCQyxXQUFXO1lBQUM7WUFBSTtTQUF1QjtJQUN6QztJQUNBRSxTQUFTO1FBQ1BMLE1BQU1DO1FBQ05DLFVBQVU7WUFBQztZQUFNO1NBQVU7UUFDM0JDLFdBQVc7WUFBQztZQUFLO1NBQXNCO0lBQ3pDO0FBQ0YsR0FDQTtJQUNFRyxZQUFZO0FBQ2Q7TUFHRixXQUFlQyxpQkFBUSxDQUFDQyxNQUFNLENBQUNDLElBQUksSUFBSUYsaUJBQVEsQ0FBQ0csS0FBSyxDQUFRLFFBQVFiIn0=

@@ -1,0 +1,81 @@
+13b61e65331bb42aefd987f06d277c72
+// test-data.ts はテストヘルパーであり、テスト自体ではないため、テストは不要
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: Object.getOwnPropertyDescriptor(all, name).get
+    });
+}
+_export(exports, {
+    get boundaryTestData () {
+        return boundaryTestData;
+    },
+    get createMockPost () {
+        return createMockPost;
+    },
+    get createMockPosts () {
+        return createMockPosts;
+    },
+    get specialCharacterData () {
+        return specialCharacterData;
+    },
+    get whitespaceData () {
+        return whitespaceData;
+    }
+});
+function createMockPost(overrides) {
+    return {
+        _id: 'test-id-' + Math.random().toString(36).substr(2, 9),
+        title: 'テスト投稿',
+        author: 'テストユーザー',
+        content: 'これはテスト用の投稿内容です。',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        ...overrides
+    };
+}
+function createMockPosts(count) {
+    return Array.from({
+        length: count
+    }, (_, i)=>createMockPost({
+            _id: `test-id-${i}`,
+            title: `テスト投稿 ${i + 1}`,
+            author: `テストユーザー ${i + 1}`,
+            content: `これはテスト投稿 ${i + 1} の内容です。`
+        }));
+}
+const boundaryTestData = {
+    title: {
+        min: 'あ',
+        max: 'あ'.repeat(100),
+        over: 'あ'.repeat(101)
+    },
+    author: {
+        min: 'あ',
+        max: 'あ'.repeat(50),
+        over: 'あ'.repeat(51)
+    },
+    content: {
+        min: 'あ',
+        max: 'あ'.repeat(140),
+        over: 'あ'.repeat(141)
+    }
+};
+const specialCharacterData = {
+    title: '<script>alert("XSS")</script>',
+    author: '"; DROP TABLE posts; --',
+    content: '改行を\n含む\nテキスト'
+};
+const whitespaceData = {
+    empty: '',
+    spaces: '   ',
+    tabs: '\t\t\t',
+    newlines: '\n\n\n',
+    mixed: '  \t\n  '
+};
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcamFubmVcXERvY3VtZW50c1xcd29ya3NwYWNlXFxteS1ib2FyZC1hcHBcXHRlc3QtaGVscGVyc1xcdGVzdC1kYXRhLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIHRlc3QtZGF0YS50cyDjga/jg4bjgrnjg4jjg5jjg6vjg5Hjg7zjgafjgYLjgorjgIHjg4bjgrnjg4joh6rkvZPjgafjga/jgarjgYTjgZ/jgoHjgIHjg4bjgrnjg4jjga/kuI3opoFcbmltcG9ydCB7IFBvc3QgfSBmcm9tICdAL2FwcC9wYWdlJ1xuXG4vLyDjg4bjgrnjg4jnlKjjga7mipXnqL/jg4fjg7zjgr/jg5XjgqHjgq/jg4jjg6rjg7xcbmV4cG9ydCBmdW5jdGlvbiBjcmVhdGVNb2NrUG9zdChvdmVycmlkZXM/OiBQYXJ0aWFsPFBvc3Q+KTogUG9zdCB7XG4gIHJldHVybiB7XG4gICAgX2lkOiAndGVzdC1pZC0nICsgTWF0aC5yYW5kb20oKS50b1N0cmluZygzNikuc3Vic3RyKDIsIDkpLFxuICAgIHRpdGxlOiAn44OG44K544OI5oqV56i/JyxcbiAgICBhdXRob3I6ICfjg4bjgrnjg4jjg6bjg7zjgrbjg7wnLFxuICAgIGNvbnRlbnQ6ICfjgZPjgozjga/jg4bjgrnjg4jnlKjjga7mipXnqL/lhoXlrrnjgafjgZnjgIInLFxuICAgIGNyZWF0ZWRBdDogbmV3IERhdGUoKS50b0lTT1N0cmluZygpLFxuICAgIHVwZGF0ZWRBdDogbmV3IERhdGUoKS50b0lTT1N0cmluZygpLFxuICAgIC4uLm92ZXJyaWRlcyxcbiAgfVxufVxuXG4vLyDopIfmlbDjga7mipXnqL/jg4fjg7zjgr/jgpLnlJ/miJBcbmV4cG9ydCBmdW5jdGlvbiBjcmVhdGVNb2NrUG9zdHMoY291bnQ6IG51bWJlcik6IFBvc3RbXSB7XG4gIHJldHVybiBBcnJheS5mcm9tKHsgbGVuZ3RoOiBjb3VudCB9LCAoXywgaSkgPT4gXG4gICAgY3JlYXRlTW9ja1Bvc3Qoe1xuICAgICAgX2lkOiBgdGVzdC1pZC0ke2l9YCxcbiAgICAgIHRpdGxlOiBg44OG44K544OI5oqV56i/ICR7aSArIDF9YCxcbiAgICAgIGF1dGhvcjogYOODhuOCueODiOODpuODvOOCtuODvCAke2kgKyAxfWAsXG4gICAgICBjb250ZW50OiBg44GT44KM44Gv44OG44K544OI5oqV56i/ICR7aSArIDF9IOOBruWGheWuueOBp+OBmeOAgmAsXG4gICAgfSlcbiAgKVxufVxuXG4vLyDlooPnlYzlgKTjg4bjgrnjg4jnlKjjg4fjg7zjgr9cbmV4cG9ydCBjb25zdCBib3VuZGFyeVRlc3REYXRhID0ge1xuICB0aXRsZToge1xuICAgIG1pbjogJ+OBgicsXG4gICAgbWF4OiAn44GCJy5yZXBlYXQoMTAwKSxcbiAgICBvdmVyOiAn44GCJy5yZXBlYXQoMTAxKSxcbiAgfSxcbiAgYXV0aG9yOiB7XG4gICAgbWluOiAn44GCJyxcbiAgICBtYXg6ICfjgYInLnJlcGVhdCg1MCksXG4gICAgb3ZlcjogJ+OBgicucmVwZWF0KDUxKSxcbiAgfSxcbiAgY29udGVudDoge1xuICAgIG1pbjogJ+OBgicsXG4gICAgbWF4OiAn44GCJy5yZXBlYXQoMTQwKSxcbiAgICBvdmVyOiAn44GCJy5yZXBlYXQoMTQxKSxcbiAgfSxcbn1cblxuLy8g54m55q6K5paH5a2X44KS5ZCr44KA44OG44K544OI44OH44O844K/XG5leHBvcnQgY29uc3Qgc3BlY2lhbENoYXJhY3RlckRhdGEgPSB7XG4gIHRpdGxlOiAnPHNjcmlwdD5hbGVydChcIlhTU1wiKTwvc2NyaXB0PicsXG4gIGF1dGhvcjogJ1wiOyBEUk9QIFRBQkxFIHBvc3RzOyAtLScsXG4gIGNvbnRlbnQ6ICfmlLnooYzjgpJcXG7lkKvjgoBcXG7jg4bjgq3jgrnjg4gnLFxufVxuXG4vLyDnqbrnmb3mloflrZfjga7jg4bjgrnjg4jjg4fjg7zjgr9cbmV4cG9ydCBjb25zdCB3aGl0ZXNwYWNlRGF0YSA9IHtcbiAgZW1wdHk6ICcnLFxuICBzcGFjZXM6ICcgICAnLFxuICB0YWJzOiAnXFx0XFx0XFx0JyxcbiAgbmV3bGluZXM6ICdcXG5cXG5cXG4nLFxuICBtaXhlZDogJyAgXFx0XFxuICAnLFxufSJdLCJuYW1lcyI6WyJib3VuZGFyeVRlc3REYXRhIiwiY3JlYXRlTW9ja1Bvc3QiLCJjcmVhdGVNb2NrUG9zdHMiLCJzcGVjaWFsQ2hhcmFjdGVyRGF0YSIsIndoaXRlc3BhY2VEYXRhIiwib3ZlcnJpZGVzIiwiX2lkIiwiTWF0aCIsInJhbmRvbSIsInRvU3RyaW5nIiwic3Vic3RyIiwidGl0bGUiLCJhdXRob3IiLCJjb250ZW50IiwiY3JlYXRlZEF0IiwiRGF0ZSIsInRvSVNPU3RyaW5nIiwidXBkYXRlZEF0IiwiY291bnQiLCJBcnJheSIsImZyb20iLCJsZW5ndGgiLCJfIiwiaSIsIm1pbiIsIm1heCIsInJlcGVhdCIsIm92ZXIiLCJlbXB0eSIsInNwYWNlcyIsInRhYnMiLCJuZXdsaW5lcyIsIm1peGVkIl0sIm1hcHBpbmdzIjoiQUFBQSw4Q0FBOEM7Ozs7Ozs7Ozs7OztRQTZCakNBO2VBQUFBOztRQXpCR0M7ZUFBQUE7O1FBYUFDO2VBQUFBOztRQStCSEM7ZUFBQUE7O1FBT0FDO2VBQUFBOzs7QUFuRE4sU0FBU0gsZUFBZUksU0FBeUI7SUFDdEQsT0FBTztRQUNMQyxLQUFLLGFBQWFDLEtBQUtDLE1BQU0sR0FBR0MsUUFBUSxDQUFDLElBQUlDLE1BQU0sQ0FBQyxHQUFHO1FBQ3ZEQyxPQUFPO1FBQ1BDLFFBQVE7UUFDUkMsU0FBUztRQUNUQyxXQUFXLElBQUlDLE9BQU9DLFdBQVc7UUFDakNDLFdBQVcsSUFBSUYsT0FBT0MsV0FBVztRQUNqQyxHQUFHWCxTQUFTO0lBQ2Q7QUFDRjtBQUdPLFNBQVNILGdCQUFnQmdCLEtBQWE7SUFDM0MsT0FBT0MsTUFBTUMsSUFBSSxDQUFDO1FBQUVDLFFBQVFIO0lBQU0sR0FBRyxDQUFDSSxHQUFHQyxJQUN2Q3RCLGVBQWU7WUFDYkssS0FBSyxDQUFDLFFBQVEsRUFBRWlCLEdBQUc7WUFDbkJaLE9BQU8sQ0FBQyxNQUFNLEVBQUVZLElBQUksR0FBRztZQUN2QlgsUUFBUSxDQUFDLFFBQVEsRUFBRVcsSUFBSSxHQUFHO1lBQzFCVixTQUFTLENBQUMsU0FBUyxFQUFFVSxJQUFJLEVBQUUsT0FBTyxDQUFDO1FBQ3JDO0FBRUo7QUFHTyxNQUFNdkIsbUJBQW1CO0lBQzlCVyxPQUFPO1FBQ0xhLEtBQUs7UUFDTEMsS0FBSyxJQUFJQyxNQUFNLENBQUM7UUFDaEJDLE1BQU0sSUFBSUQsTUFBTSxDQUFDO0lBQ25CO0lBQ0FkLFFBQVE7UUFDTlksS0FBSztRQUNMQyxLQUFLLElBQUlDLE1BQU0sQ0FBQztRQUNoQkMsTUFBTSxJQUFJRCxNQUFNLENBQUM7SUFDbkI7SUFDQWIsU0FBUztRQUNQVyxLQUFLO1FBQ0xDLEtBQUssSUFBSUMsTUFBTSxDQUFDO1FBQ2hCQyxNQUFNLElBQUlELE1BQU0sQ0FBQztJQUNuQjtBQUNGO0FBR08sTUFBTXZCLHVCQUF1QjtJQUNsQ1EsT0FBTztJQUNQQyxRQUFRO0lBQ1JDLFNBQVM7QUFDWDtBQUdPLE1BQU1ULGlCQUFpQjtJQUM1QndCLE9BQU87SUFDUEMsUUFBUTtJQUNSQyxNQUFNO0lBQ05DLFVBQVU7SUFDVkMsT0FBTztBQUNUIn0=

@@ -1,0 +1,20 @@
+{
+  "framework": "nextjs",
+  "env": {
+    "MONGODB_URI": "@mongodb-uri"
+  },
+  "build": {
+    "env": {
+      "MONGODB_URI": "@mongodb-uri"
+    }
+  },
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "regions": ["nrt1"],
+  "github": {
+    "silent": true
+  }
+}
