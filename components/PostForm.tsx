@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getUserId } from '@/lib/user';
 
 interface PostFormProps {
   onPostCreated: () => void;
@@ -28,12 +29,13 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
     setIsSubmitting(true);
 
     try {
+      const userId = getUserId();
       const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, author, content }),
+        body: JSON.stringify({ title, author, content, userId }),
       });
 
       const data = await response.json();
@@ -55,8 +57,8 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-8" data-testid="post-form">
-      <h2 className="text-xl font-bold mb-4">新規投稿</h2>
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-8" data-testid="post-form">
+      <h2 className="text-lg sm:text-xl font-bold mb-4">新規投稿</h2>
       <form onSubmit={handleSubmit} className="space-y-4" data-testid="post-form-container">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">

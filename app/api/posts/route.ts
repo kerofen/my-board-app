@@ -47,9 +47,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // 入力検証
-    if (!body.title || !body.author || !body.content) {
+    if (!body.title || !body.author || !body.content || !body.userId) {
       return NextResponse.json(
-        { success: false, error: 'タイトル、投稿者名、内容は必須です' },
+        { success: false, error: 'タイトル、投稿者名、内容、ユーザーIDは必須です' },
         { status: 400 }
       );
     }

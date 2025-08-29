@@ -4,6 +4,7 @@ export interface IPost extends Document {
   title: string;
   author: string;
   content: string;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,6 +25,10 @@ const PostSchema: Schema = new Schema(
       type: String,
       required: [true, '内容は必須です'],
       maxlength: [140, '内容は140文字以内で入力してください'],
+    },
+    userId: {
+      type: String,
+      required: [true, 'ユーザーIDは必須です'],
     },
   },
   {

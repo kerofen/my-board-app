@@ -10,6 +10,7 @@ export interface Post {
   title: string;
   author: string;
   content: string;
+  userId: string;
   createdAt: string;
   updatedAt: string;
 }
