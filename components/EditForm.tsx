@@ -30,6 +30,7 @@ export default function EditForm({ post, onCancel, onSaved }: EditFormProps) {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'x-user-id': post.userId,
         },
         body: JSON.stringify({ title, author, content }),
       });
@@ -50,8 +51,8 @@ export default function EditForm({ post, onCancel, onSaved }: EditFormProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6" data-testid="edit-form">
-      <h3 className="text-xl font-bold mb-4">投稿を編集</h3>
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6" data-testid="edit-form">
+      <h3 className="text-lg sm:text-xl font-bold mb-4">投稿を編集</h3>
       <form onSubmit={handleSubmit} className="space-y-4" data-testid="edit-form-container">
         <div>
           <label htmlFor="edit-title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -101,7 +102,7 @@ export default function EditForm({ post, onCancel, onSaved }: EditFormProps) {
           />
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex gap-2">
           <button
             type="submit"
             data-testid="edit-form-save"

@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run build:*)",
-      "Bash(test -d .next)"
+      "Bash(test -d .next)",
+      "Bash(npx vercel:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,6 +5,7 @@ export const mockPosts = [
     title: 'サンプル投稿',
     author: 'テストユーザー',
     content: 'これはMongoDBが接続できない場合のサンプル投稿です。',
+    userId: 'system_user',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }
@@ -20,7 +21,7 @@ export const mockDb = {
     );
   },
   
-  async create(data: { title: string; author: string; content: string }) {
+  async create(data: { title: string; author: string; content: string; userId: string }) {
     const newPost = {
       _id: String(nextId++),
       ...data,

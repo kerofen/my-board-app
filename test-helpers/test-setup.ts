@@ -17,6 +17,7 @@ export const setupTestData = async () => {
     title: '初期投稿',
     author: 'システム',
     content: 'テスト環境の初期投稿です',
+    userId: 'system_user',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -74,6 +75,7 @@ export const createTestScenario = async (scenario: 'empty' | 'single' | 'multipl
           title: '単一テスト投稿',
           author: 'テスター',
           content: 'これは単一の投稿です',
+          userId: 'test_user_1',
         });
       }
       break;
@@ -86,6 +88,7 @@ export const createTestScenario = async (scenario: 'empty' | 'single' | 'multipl
             title: `テスト投稿 ${i}`,
             author: `ユーザー ${i}`,
             content: `内容 ${i}`,
+            userId: `test_user_${i}`,
           });
         }
       }
@@ -99,6 +102,7 @@ export const createTestScenario = async (scenario: 'empty' | 'single' | 'multipl
             title: `大量テスト投稿 ${i}`,
             author: `ユーザー ${(i % 10) + 1}`,
             content: `これは${i}番目の投稿です`,
+            userId: `test_user_${(i % 10) + 1}`,
           });
         }
       }
@@ -114,6 +118,7 @@ export const validateTestData = (data: any) => {
   if (!data.title || data.title.trim() === '') errors.push('タイトルが無効です');
   if (!data.author || data.author.trim() === '') errors.push('作成者が無効です');
   if (!data.content || data.content.trim() === '') errors.push('内容が無効です');
+  if (!data.userId) errors.push('ユーザーIDが存在しません');
   if (!data.createdAt) errors.push('作成日時が存在しません');
   if (!data.updatedAt) errors.push('更新日時が存在しません');
   

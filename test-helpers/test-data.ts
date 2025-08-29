@@ -8,6 +8,7 @@ export function createMockPost(overrides?: Partial<Post>): Post {
     title: 'テスト投稿',
     author: 'テストユーザー',
     content: 'これはテスト用の投稿内容です。',
+    userId: 'test-user-id',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     ...overrides,
