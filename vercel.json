@@ -1,13 +1,5 @@
 {
   "framework": "nextjs",
-  "env": {
-    "MONGODB_URI": "@mongodb-uri"
-  },
-  "build": {
-    "env": {
-      "MONGODB_URI": "@mongodb-uri"
-    }
-  },
   "functions": {
     "app/api/posts/route.ts": {
       "maxDuration": 10
